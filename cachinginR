@@ -1,0 +1,44 @@
+## The following two functions are used to create a special object that stores a matrix and caches its inverse.
+## The <<-operator is used here to assign a value to an object in an enviroment that is different from the current enviroment
+## The first function makeCacheMatrix create a special matriax, which is really a list containing a function to:
+## 1. set the value of the matrix
+## 2. get the value of the matrix
+## 3. set the value of the inverse
+## 4. get the value of the inverse
+
+
+makeCacheMatrix=function(x=matrix()) {
+    z=NULL
+  set=function(y) {
+      x<<-y
+      z<<-NULL
+   }
+ get=function() x
+ setinverse=function(inverse) z<<-inverse
+ getinverse=function() z
+ list(set=set, get=get,
+      setinverse=setinverse,
+      getinverse=getinverse)
+}
+
+
+## The second function computes the inverse of the special matrix returned by the first function makeCacheMatrix.
+## solve function is used.
+## Assume the matrix supplied is always invertible.
+## If the inverse has already been calculated, then cacheSolve should retrive the inverse from the cache
+
+
+cacheSolve=function(x,...) {
+    z=x$getinverse()
+    if (!is.null(z)) {
+          message("getting cached data")
+          retur(z)
+    }
+    
+    data=x$get()
+    z=solve(data,...)
+    x$setinverse(z)
+    z
+ }
+
+      
